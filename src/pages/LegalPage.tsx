@@ -4,11 +4,7 @@ import { Reveal } from '../components/ui/Reveal'
 import { Icon } from '../components/ui/Icon'
 import { Button } from '../components/ui/Button'
 import { findLegal, legalPages } from '../data/legal'
-
-function formatDate(d: string | null) {
-  if (!d) return ''
-  return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-}
+import { formatDate } from '../lib/utils'
 
 export function LegalPage() {
   const { slug } = useParams()

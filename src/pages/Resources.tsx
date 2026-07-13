@@ -5,7 +5,7 @@ import { Eyebrow } from '../components/ui/Eyebrow'
 import { Reveal } from '../components/ui/Reveal'
 import { Icon } from '../components/ui/Icon'
 import { Button } from '../components/ui/Button'
-import { cn } from '../lib/utils'
+import { cn, formatDate } from '../lib/utils'
 import { EASE_OUT } from '../lib/motion'
 import { CATEGORIES, TOPICS, resources, type ResourceMeta } from '../data/resources'
 
@@ -17,11 +17,6 @@ const catTone: Record<string, string> = {
   'case-studies': 'bg-emerald-50 text-emerald-700',
   press: 'bg-amber-50 text-amber-700',
   'white-papers': 'bg-nile-800/10 text-nile-800',
-}
-
-function formatDate(d: string | null) {
-  if (!d) return ''
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 }
 
 function Card({ r }: { r: ResourceMeta }) {
@@ -56,7 +51,7 @@ function Card({ r }: { r: ResourceMeta }) {
         <p className="mt-2 line-clamp-2 flex-1 text-sm leading-relaxed text-ink-600">{r.excerpt}</p>
         <div className="mt-4 flex items-center justify-between border-t border-ink-100 pt-3 text-xs text-ink-400">
           <span>
-            {formatDate(r.date)} · {r.readMinutes} min read
+            {formatDate(r.date, { month: 'short', year: 'numeric' })} · {r.readMinutes} min read
           </span>
           <span className="inline-flex items-center gap-1 font-semibold text-skylla-600">
             {r.externalUrl ? 'Visit' : 'Read'}

@@ -4,11 +4,7 @@ import { Reveal } from '../components/ui/Reveal'
 import { Icon } from '../components/ui/Icon'
 import { Button } from '../components/ui/Button'
 import { findResource, prettifyAuthor } from '../data/resources'
-
-function formatDate(d: string | null) {
-  if (!d) return ''
-  return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-}
+import { formatDate } from '../lib/utils'
 
 export function ResourceArticle() {
   const { slug } = useParams()
