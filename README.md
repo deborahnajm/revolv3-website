@@ -84,8 +84,26 @@ Payment Optimization). This build reproduces that exact taxonomy in
 > collection and drop the items into the `resources` array — its shape maps 1:1
 > to the CMS fields (title, excerpt, type, topic, readTime, date, href).
 
-## Contact form
+## Contact form → HubSpot
 
-`src/components/sections/Contact.tsx` is a fully validated, embedded form with a
-success state. It currently simulates submission — wire the marked integration
-point to your CRM (e.g. a HubSpot Forms submission) to go live.
+`src/components/sections/Contact.tsx` is a fully validated, embedded form with
+success and error states. It submits to HubSpot via the **Forms Submission API
+v3** (`src/lib/hubspot.ts`) — a browser-native path with no backend and no
+secret token. The Revolv3 **Portal ID (`22077173`)** is baked in as the default.
+
+### Go live in two steps
+
+1. **Create a HubSpot form** (Marketing → Forms) with these fields:
+   `First name`, `Last name`, `Email` (required), `Company`, `Message`.
+   Copy its **Form GUID** from the editor URL (`…/forms/editor/<GUID>`).
+2. **Set the GUID** at build time. Copy `.env.example` → `.env` and set
+   `VITE_HUBSPOT_FORM_GUID=<your-guid>` (or set it in your host's build env).
+
+Field mapping: the single `Name` field is split into `firstname` / `lastname`;
+`email` and `company` map directly; the selected volume is folded into the
+standard `message` property (so no custom property is needed). Submissions
+include the `hubspotutk` cookie for visitor attribution.
+
+Until a GUID is set, the form validates and shows the success state but does not
+send (a dev-only console warning notes this), so the site stays functional
+pre-configuration.

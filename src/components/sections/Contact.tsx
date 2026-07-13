@@ -6,6 +6,7 @@ import { Icon } from '../ui/Icon'
 import { cta } from '../../data/content'
 import { EASE_OUT } from '../../lib/motion'
 import { cn } from '../../lib/utils'
+import { isHubSpotConfigured, submitToHubSpot } from '../../lib/hubspot'
 
 const volumes = [
   'Under $25M',
@@ -30,7 +31,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export function Contact() {
   const [fields, setFields] = useState<Fields>({ name: '', email: '', company: '', volume: '', message: '' })
   const [errors, setErrors] = useState<Errors>({})
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle')
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
+  const [submitError, setSubmitError] = useState('')
 
   const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFields((f) => ({ ...f, [k]: e.target.value }))
@@ -51,10 +53,22 @@ export function Contact() {
     e.preventDefault()
     if (!validate()) return
     setStatus('submitting')
-    // Integration point: POST `fields` to your CRM / form endpoint
-    // (e.g. a HubSpot Forms submission). Simulated here.
-    await new Promise((r) => setTimeout(r, 900))
-    setStatus('success')
+    setSubmitError('')
+    try {
+      if (isHubSpotConfigured()) {
+        await submitToHubSpot(fields)
+      } else {
+        // No Form GUID configured yet — simulate so the site stays functional.
+        if (import.meta.env.DEV) {
+          console.warn('[Revolv3] HubSpot form not configured — set VITE_HUBSPOT_FORM_GUID to submit for real.')
+        }
+        await new Promise((r) => setTimeout(r, 800))
+      }
+      setStatus('success')
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.')
+      setStatus('error')
+    }
   }
 
   return (
@@ -171,6 +185,15 @@ export function Contact() {
                         placeholder="A benchmark, a processor change, a decline spike…"
                       />
                     </Field>
+
+                    {status === 'error' && submitError && (
+                      <p
+                        role="alert"
+                        className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600"
+                      >
+                        {submitError}
+                      </p>
+                    )}
 
                     <button
                       type="submit"
