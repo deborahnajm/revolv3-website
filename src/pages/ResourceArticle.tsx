@@ -1,16 +1,43 @@
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Reveal } from '../components/ui/Reveal'
 import { Icon } from '../components/ui/Icon'
 import { Button } from '../components/ui/Button'
-import { resources } from '../data/resources'
+import { findResource, prettifyAuthor } from '../data/resources'
 
-function formatDate(d: string) {
+function formatDate(d: string | null) {
+  if (!d) return ''
   return new Date(d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
 }
 
 export function ResourceArticle() {
   const { slug } = useParams()
-  const r = resources.find((x) => x.slug === slug)
+  const r = slug ? findResource(slug) : undefined
+  const [html, setHtml] = useState<string | null>(null)
+  const [bodyState, setBodyState] = useState<'loading' | 'ready' | 'missing'>('loading')
+
+  useEffect(() => {
+    if (!r || !r.hasBody || !slug) {
+      setBodyState('missing')
+      return
+    }
+    let active = true
+    setBodyState('loading')
+    setHtml(null)
+    fetch(`${import.meta.env.BASE_URL}resource-bodies/${slug}.json`)
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
+      .then((data: { html: string }) => {
+        if (!active) return
+        setHtml(data.html)
+        setBodyState('ready')
+      })
+      .catch(() => {
+        if (active) setBodyState('missing')
+      })
+    return () => {
+      active = false
+    }
+  }, [slug, r])
 
   if (!r) {
     return (
@@ -39,59 +66,73 @@ export function ResourceArticle() {
             </Link>
           </Reveal>
           <Reveal delay={0.05}>
-            <div className="mt-6 flex items-center gap-3 text-xs font-semibold uppercase tracking-overline text-pool-300">
-              <span>{r.type}</span>
-              <span className="h-1 w-1 rounded-full bg-white/30" />
-              <span>{r.topic}</span>
+            <div className="mt-6 flex flex-wrap items-center gap-3 text-xs font-semibold uppercase tracking-overline text-pool-300">
+              <span>{r.categoryLabel}</span>
+              {r.topicLabel && (
+                <>
+                  <span className="h-1 w-1 rounded-full bg-white/30" />
+                  <span>{r.topicLabel}</span>
+                </>
+              )}
             </div>
           </Reveal>
           <Reveal delay={0.1}>
             <h1 className="mt-4 text-display-lg font-extrabold text-white">{r.title}</h1>
           </Reveal>
           <Reveal delay={0.15}>
-            <p className="mt-4 text-sm text-white/50">
-              {formatDate(r.date)} · {r.readTime}
+            <p className="mt-5 text-sm text-white/50">
+              {prettifyAuthor(r.author)} · {formatDate(r.date)} · {r.readMinutes} min read
             </p>
           </Reveal>
         </div>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
-        <div className="container-x max-w-2xl">
-          <Reveal>
-            <p className="text-xl leading-relaxed text-ink-800">{r.excerpt}</p>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className="mt-8 space-y-5 text-lg leading-relaxed text-ink-700">
-              <p>
-                Merchants come to Revolv3 measuring their performance with the same instruments that produce the
-                problem. When your only view of authorization comes from your processor, you are asking the entity you
-                are trying to evaluate to evaluate itself.
-              </p>
-              <p>
-                The gap between your current authorization rate and your achievable rate is real, measurable, and
-                closeable. The only thing standing between most merchants and a materially better outcome is the absence
-                of an independent layer that makes optimization possible.
-              </p>
-            </div>
-          </Reveal>
+      {/* Hero image */}
+      {r.image && (
+        <div className="bg-white">
+          <div className="container-x max-w-3xl">
+            <img
+              src={r.image}
+              alt=""
+              className="-mt-8 aspect-[16/9] w-full rounded-2xl object-cover shadow-lg"
+              decoding="async"
+            />
+          </div>
+        </div>
+      )}
 
-          <Reveal delay={0.14}>
-            <div className="mt-12 rounded-2xl border border-ink-200 bg-gradient-sky-wash p-8 text-center">
-              <h2 className="text-2xl font-bold text-nile-900">See what the gap is worth for you</h2>
-              <p className="mx-auto mt-3 max-w-md text-[0.95rem] leading-relaxed text-ink-600">
-                Twenty minutes is usually enough to benchmark your authorization performance against merchants at your
-                volume and card mix.
-              </p>
-              <Button
-                to="/#contact"
-                className="mt-6"
-                icon={<Icon name="arrow-right" className="h-4 w-4" />}
-              >
-                Request your benchmark
-              </Button>
+      <section className="bg-white py-14 sm:py-16">
+        <div className="container-x max-w-2xl">
+          {r.excerpt && (
+            <Reveal>
+              <p className="mb-8 text-xl leading-relaxed text-ink-800">{r.excerpt}</p>
+            </Reveal>
+          )}
+
+          {bodyState === 'loading' && (
+            <div className="flex justify-center py-10">
+              <span className="h-7 w-7 animate-spin rounded-full border-2 border-skylla-200 border-t-skylla-600" />
             </div>
-          </Reveal>
+          )}
+          {bodyState === 'ready' && html && (
+            <div className="prose-r3" dangerouslySetInnerHTML={{ __html: html }} />
+          )}
+          {bodyState === 'missing' && (
+            <p className="text-lg leading-relaxed text-ink-700">
+              The full text of this resource is being migrated. In the meantime, reach out and we will send it your way.
+            </p>
+          )}
+
+          <div className="mt-12 rounded-2xl border border-ink-200 bg-gradient-sky-wash p-8 text-center">
+            <h2 className="text-2xl font-bold text-nile-900">See what the gap is worth for you</h2>
+            <p className="mx-auto mt-3 max-w-md text-[0.95rem] leading-relaxed text-ink-600">
+              Twenty minutes is usually enough to benchmark your authorization performance against merchants at your
+              volume and card mix.
+            </p>
+            <Button to="/#contact" className="mt-6" icon={<Icon name="arrow-right" className="h-4 w-4" />}>
+              Request your benchmark
+            </Button>
+          </div>
         </div>
       </section>
     </article>

@@ -117,6 +117,69 @@
     @apply rounded-2xl border border-ink-200/80 bg-white shadow-sm;
   }
 
+  /* Rich-text article body (Webflow CMS Post Body HTML) */
+  .prose-r3 {
+    @apply text-lg leading-relaxed text-ink-700;
+  }
+  .prose-r3 > * + * {
+    @apply mt-5;
+  }
+  .prose-r3 h2 {
+    @apply mt-12 text-2xl font-bold text-nile-900;
+  }
+  .prose-r3 h3 {
+    @apply mt-10 text-xl font-bold text-nile-900;
+  }
+  .prose-r3 h4 {
+    @apply mt-8 text-lg font-bold text-nile-900;
+  }
+  .prose-r3 p {
+    @apply text-ink-700;
+  }
+  .prose-r3 a {
+    @apply font-semibold text-skylla-700 underline decoration-skylla-300 underline-offset-2 hover:text-skylla-800;
+  }
+  .prose-r3 ul {
+    @apply list-disc space-y-2 pl-6 marker:text-skylla-400;
+  }
+  .prose-r3 ol {
+    @apply list-decimal space-y-2 pl-6 marker:text-ink-400;
+  }
+  .prose-r3 li {
+    @apply pl-1;
+  }
+  .prose-r3 img {
+    @apply my-8 w-full rounded-xl shadow-sm;
+  }
+  .prose-r3 figure {
+    @apply my-8;
+  }
+  .prose-r3 figcaption {
+    @apply mt-2 text-center text-sm text-ink-400;
+  }
+  .prose-r3 blockquote {
+    @apply border-l-2 border-skylla-500 pl-6 text-xl font-semibold text-nile-900;
+  }
+  .prose-r3 strong {
+    @apply font-bold text-nile-900;
+  }
+  .prose-r3 h1 {
+    @apply mt-10 text-3xl font-extrabold text-nile-900;
+  }
+  .prose-r3 table {
+    @apply my-6 w-full border-collapse text-left text-sm;
+  }
+  .prose-r3 th,
+  .prose-r3 td {
+    @apply border border-ink-200 px-3 py-2;
+  }
+  .prose-r3 th {
+    @apply bg-ink-50 font-semibold text-nile-900;
+  }
+  .prose-r3 iframe {
+    @apply my-8 aspect-video w-full rounded-xl;
+  }
+
   /* Subtle grid texture overlay */
   .bg-grid {
     background-image:

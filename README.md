@@ -71,18 +71,39 @@ three value pillars (Control · Performance · Intelligence) structure the platf
 section. The impact calculator uses the ICP Revenue Impact Framework
 (1% of $100M volume = $1M recovered).
 
-## Resources content — migration note
+## Resources (migrated from Webflow CMS)
 
-The live site (`revolv3.com/resources`) organizes content by **type** (Blogs,
-Case Studies, Press & Podcasts) and **topic** (Revenue, Payment Processing,
-Payment Optimization). This build reproduces that exact taxonomy in
-`src/data/resources.ts`, seeded with known + representative items.
+All **105 live resources** from the Webflow "Resources" collection are migrated
+in, organized by **type** (Article, Blog, Case Study, Press, White Paper) and
+**topic** (Payment Optimization, Payment Processing, Revenue, Subscription
+Management, Customer Churn, Enterprise Payment Systems). The listing has search,
+type/topic filters, and load-more; each article renders its full body.
 
-> The environment used to build this site cannot reach the live Webflow domain
-> (bot protection returns 403), so the full existing library could not be
-> scraped automatically. To preserve everything, export the Webflow "Resources"
-> collection and drop the items into the `resources` array — its shape maps 1:1
-> to the CMS fields (title, excerpt, type, topic, readTime, date, href).
+### Importer
+
+`scripts/import-resources.mjs` turns a Webflow CSV export into committed data:
+
+```bash
+node scripts/import-resources.mjs <path-to-Resources-export.csv>
+```
+
+It writes:
+
+- `src/data/resources.index.json` — lightweight metadata for the listing
+- `public/resource-bodies/<slug>.json` — one file per article body, fetched on
+  demand so the listing stays fast and each article loads only its own content
+
+Only published, non-draft, non-archived rows are included; read time is computed
+from the body. **Re-run it whenever the CMS changes.** The category/topic label
+maps at the top of the script are the place to adjust wording, and the same
+pattern extends to your other Webflow collections.
+
+### Images
+
+Article images currently reference the Webflow CDN
+(`cdn.prod.website-files.com`). They work as-is, but if you decommission the
+Webflow site you should rehost them (download into `public/` and rewrite the
+`image` URLs in the importer) so nothing depends on Webflow long-term.
 
 ## Contact form → HubSpot
 
