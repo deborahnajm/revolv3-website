@@ -1,0 +1,30 @@
+[
+  {
+    "slug": "privacy-policy",
+    "title": "Privacy Policy",
+    "intro": "This Privacy Policy describes ur policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.",
+    "lastUpdated": "2022-06-08",
+    "hasBody": true
+  },
+  {
+    "slug": "terms-and-conditions",
+    "title": "Terms and Conditions",
+    "intro": "These are the Terms and Conditions governing the use of this Service and the agreement that operates between You and the Company. These Terms and Conditions set out the rights and obligations of all users regarding the use of the Service. ",
+    "lastUpdated": "2022-08-22",
+    "hasBody": true
+  },
+  {
+    "slug": "cookies-policy",
+    "title": "Cookies Policy",
+    "intro": "If You do not accept Our Cookies, You may experience some inconvenience in your use of the Website and some features may not function properly. If You'd like to delete Cookies or instruct your web browser to delete or refuse Cookies, please visit the help pages of your web browser.",
+    "lastUpdated": "2022-06-28",
+    "hasBody": true
+  },
+  {
+    "slug": "disclaimer",
+    "title": "Disclaimer",
+    "intro": "The information contained on the Service is for general information purposes only. The Company assumes no responsibility for errors or omissions in the contents of the Service.",
+    "lastUpdated": "2022-06-08",
+    "hasBody": true
+  }
+]

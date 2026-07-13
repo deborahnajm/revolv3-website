@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Logo } from '../ui/Logo'
 import { POSITIONING, footerNav } from '../../data/content'
+import { legalPages } from '../../data/legal'
 
 export function Footer() {
   const year = 2026
@@ -46,9 +47,20 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center">
-          <p className="text-sm text-white/50">© {year} Revolv3. All rights reserved.</p>
-          <p className="text-sm text-white/50">Authorization is a variable, not a constant.</p>
+        <div className="mt-14 flex flex-col gap-5 border-t border-white/10 pt-6">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            {legalPages.map((p) => (
+              <li key={p.slug}>
+                <Link to={`/legal/${p.slug}`} className="text-sm text-white/60 transition-colors hover:text-white">
+                  {p.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center">
+            <p className="text-sm text-white/50">© {year} Revolv3. All rights reserved.</p>
+            <p className="text-sm text-white/50">Authorization is a variable, not a constant.</p>
+          </div>
         </div>
       </div>
     </footer>
