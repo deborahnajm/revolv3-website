@@ -8,9 +8,10 @@
    form you create — set it via VITE_HUBSPOT_FORM_GUID at build time.
    ============================================================ */
 
-// Revolv3 HubSpot account (Hub ID). Public value; safe to ship.
+// Revolv3 HubSpot account (Hub ID) and live contact form. Both are public
+// browser-side values; safe to ship. Override via env for staging/testing.
 const PORTAL_ID = import.meta.env.VITE_HUBSPOT_PORTAL_ID ?? '22077173'
-const FORM_GUID = import.meta.env.VITE_HUBSPOT_FORM_GUID ?? ''
+const FORM_GUID = import.meta.env.VITE_HUBSPOT_FORM_GUID ?? 'c773e6a9-7746-4cb7-9045-7dc7ef669d44'
 
 export type ContactFields = {
   name: string
