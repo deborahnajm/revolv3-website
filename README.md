@@ -27,6 +27,23 @@ npm run build      # typecheck + production build to /dist
 npm run preview    # preview the production build
 ```
 
+## Deployment (GitHub Pages)
+
+Deploys automatically to GitHub Pages via `.github/workflows/deploy.yml` on
+every push to `main` (and on manual dispatch). The workflow builds with
+`VITE_BASE=/revolv3-website/`, adds a `404.html` SPA fallback (so deep links
+like `/resources/<slug>` work on refresh), and publishes `dist/`.
+
+**One-time setup:** in the repo, go to **Settings → Pages → Build and
+deployment → Source** and choose **GitHub Actions**. After the next push to
+`main`, the site is live at:
+
+> **https://deborahnajm.github.io/revolv3-website/**
+
+The app is subpath-aware: Vite `base` and the router `basename` both derive
+from `VITE_BASE`, so it also runs cleanly at a root domain (leave `VITE_BASE`
+unset) if you later point a custom domain at it.
+
 ## Design system
 
 The visual language comes directly from the **Revolv3 Design System** (Claude
