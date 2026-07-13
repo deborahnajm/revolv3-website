@@ -11,6 +11,7 @@ const Resources = lazy(() => import('./pages/Resources').then((m) => ({ default:
 const ResourceArticle = lazy(() =>
   import('./pages/ResourceArticle').then((m) => ({ default: m.ResourceArticle })),
 )
+const LegalPage = lazy(() => import('./pages/LegalPage').then((m) => ({ default: m.LegalPage })))
 
 function RouteFallback() {
   return (
@@ -31,6 +32,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/resources" element={<Resources />} />
             <Route path="/resources/:slug" element={<ResourceArticle />} />
+            <Route path="/legal/:slug" element={<LegalPage />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </Suspense>
