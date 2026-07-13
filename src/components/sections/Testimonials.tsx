@@ -21,7 +21,7 @@ export function Testimonials() {
         <SectionHeading
           eyebrow="Voice of the merchant"
           title="The words come before the pitch."
-          sub="Verbatim from prospect and customer conversations. Nobody goes looking for payment optimization while they believe their numbers are fine — the job is showing them the gap."
+          sub="Verbatim from prospect and customer conversations. Nobody goes looking for payment optimization while they believe their numbers are fine. The job is showing them the gap."
         />
       </div>
 

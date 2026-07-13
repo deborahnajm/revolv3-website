@@ -102,6 +102,12 @@ function readMinutes(html) {
   return Math.max(1, Math.round(words / 200))
 }
 
+// House style: "&" reads as "and" in visible card headings. Decode any HTML
+// entity first, then normalize spacing around the ampersand.
+function normalizeTitle(t) {
+  return t.replace(/&amp;/g, '&').replace(/\s*&\s*/g, ' and ')
+}
+
 const csvPath = process.argv[2]
 if (!csvPath) {
   console.error('Usage: node scripts/import-resources.mjs <path-to-csv>')
@@ -143,7 +149,7 @@ for (const r of live) {
 
   index.push({
     slug,
-    title: r['Name H1'] || slug,
+    title: normalizeTitle(r['Name H1'] || slug),
     excerpt: r['SEO Description'] || '',
     category,
     categoryLabel: CATEGORY_LABELS[category] || category,

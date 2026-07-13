@@ -10,15 +10,15 @@ import { isHubSpotConfigured, submitToHubSpot } from '../../lib/hubspot'
 
 const volumes = [
   'Under $25M',
-  '$25M – $100M',
-  '$100M – $500M',
-  '$500M – $1B',
-  '$1B – $5B',
+  '$25M to $100M',
+  '$100M to $500M',
+  '$500M to $1B',
+  '$1B to $5B',
   '$5B+',
 ]
 
 const trust = [
-  { icon: 'shield-check', text: 'Proof over pitch — we lead with your benchmark, not a demo.' },
+  { icon: 'shield-check', text: 'Proof over pitch. We lead with your benchmark, not a demo.' },
   { icon: 'zap', text: 'Twenty minutes is usually enough to see the gap.' },
   { icon: 'route', text: 'Processor-agnostic. Keep every processor you run today.' },
 ] as const
