@@ -72,10 +72,15 @@ for (const r of live) {
   const slug = r['Slug']
   if (!slug) continue
   const body = r['Legal Rich Text'] || ''
+  // Source-typo corrections carried from the CMS export (applied on every import).
+  const intro = (r['SEO Description / Page Intro'] || '').replace(
+    'describes ur policies',
+    'describes our policies',
+  )
   index.push({
     slug,
     title: r['Name'] || slug,
-    intro: r['SEO Description / Page Intro'] || '',
+    intro,
     lastUpdated: toISODate(r['Date (Last Updated)']),
     pdf: r['PDF Download'] || undefined,
     hasBody: body.trim().length > 0,
